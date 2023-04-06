@@ -21,8 +21,7 @@ export interface Command {
     // Text attributes in native language
     nativeText: {  
         name: string,
-        description: string,
-        category: string
+        description: string
     },
     
     execute: (client: Client, msg: Message, args: string[]) => Promise<void>

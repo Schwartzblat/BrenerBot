@@ -14,8 +14,7 @@ let command: Command = {
     },
     nativeText: {
         name: "כיבוי",
-        description: "מי אני ומה שמי",
-        category: "פקודות מנהל"
+        description: "מי אני ומה שמי"
     },
     async execute(client: Client, msg: Message, args: string[]) {
         if (args.length) return
