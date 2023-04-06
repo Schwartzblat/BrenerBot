@@ -88,7 +88,7 @@ WhatsAppClient.on('message', async (msg: Message) => {
     await command.execute(WhatsAppClient, msg)
 })
 
-async function cleanShutdown() {  // Required for auth persistence
+export async function cleanShutdown() {  // Required for auth persistence
     console.log('Terminating...');
     await WhatsAppClient.destroy();
     console.log('Closed WhatsApp connection.');
