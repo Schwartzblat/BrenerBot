@@ -50,7 +50,7 @@ WhatsAppClient.on('qr', (qr: string) => {
 });
 
 WhatsAppClient.on('ready', () => {
-    log('Connected to WhatsApp.');
+    log('\nConnected to WhatsApp.');
 });
 
 WhatsAppClient.on('message', async (msg: Message) => {
@@ -86,11 +86,12 @@ WhatsAppClient.on('message', async (msg: Message) => {
     } else return
 
     // Processing Stage 4: Execute command
+    log("---> Executing command", command.nativeText.name, "from", msg.author ?? msg.from)
     await command.execute(WhatsAppClient, msg)
 })
 
 export async function cleanShutdown() {  // Required for auth persistence
-    console.log('Terminating...');
+    console.log('\nTerminating...');
     await WhatsAppClient.destroy();
     console.log('Closed WhatsApp connection.');
     process.exit(0);
