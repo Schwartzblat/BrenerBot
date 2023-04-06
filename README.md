@@ -4,7 +4,7 @@ An easy to use WhatsApp utility bot, written in TypeScript.
 Designed mainly for group chats!
 
 > **Warning**
-> BrenerBot relies on WhatsApp-Web.js to connect to the WhatsApp API. The connection _should_ be stable and not trigger any bans. However, WhatsApp hates fun, so consider it as a possibility and don't do anything stupid and pay attention to the API limits.
+> BrenerBot relies on WhatsApp-Web.js to connect to the WhatsApp API. The connection _should_ be stable and not trigger any bans. However, WhatsApp hates fun, so consider it as a possibility, don't do anything stupid and pay attention to the API limits.
 
 ## Features
 
