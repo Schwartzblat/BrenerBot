@@ -3,7 +3,7 @@
 
 import { join } from "path"
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "./commands/commands"
-import { phoneNumberToChat } from "./utils/phone";
+import { phoneNumberToChat, PRIVATE_CHAT_SUFFIX, GROUP_CHAT_SUFFIX } from "./utils/phone";
 import { log } from "./log"
 import { GroupChat, Message } from 'whatsapp-web.js'
 const { Client, LocalAuth, MessageTypes } = require('whatsapp-web.js')
@@ -65,10 +65,10 @@ WhatsAppClient.on('message', async (msg: Message) => {
     if (!command) return
 
     // Processing Stage 3: Verify permissions
-    if (msg.from.endsWith("@c.us")) {  // Private chat
+    if (msg.from.endsWith(PRIVATE_CHAT_SUFFIX)) {  // Private chat
         let senderPerms = (msg.from === OWNER_SERIALIZED) ? PrivateChatPermissions.Owner : PrivateChatPermissions.Everyone
         if (command.permissions.privateChat < senderPerms) return
-    } else if (msg.from.endsWith("@g.us")) {  // Group chat
+    } else if (msg.from.endsWith(GROUP_CHAT_SUFFIX)) {  // Group chat
         let senderPerms
         if (msg.author === OWNER_SERIALIZED) senderPerms = GroupChatPermissions.Owner
         else {
