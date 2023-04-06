@@ -3,9 +3,9 @@
 
 import { join } from "path"
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "./commands/commands"
+import { phoneNumberToChat } from "./utils/phone";
 import { log } from "./log"
 import { GroupChat, Message } from 'whatsapp-web.js'
-
 const { Client, LocalAuth, MessageTypes } = require('whatsapp-web.js')
 const qrcode = require('qrcode-terminal')
 
@@ -13,7 +13,7 @@ const qrcode = require('qrcode-terminal')
 // Phase 0: Load configuration file
 const config  = require("../config.json")
 const BOT_PREFIX = config.botPrefix  // Prefix for all bot commands
-const OWNER_SERIALIZED = config.owenrSerialized  // Bot's owner phone number
+const OWNER_SERIALIZED = phoneNumberToChat(config.countryCode, config.phoneNumber)  // Bot's owner phone number
 
 
 // Phase 1: Load commands

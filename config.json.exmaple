@@ -1,4 +1,5 @@
 {
     "botPrefix": "!",
-    "ownerSerialized": "<country-code><number>@c.us"
+    "countryCode": "US",
+    "phoneNumber": "2133734253"
 }
