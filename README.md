@@ -66,8 +66,8 @@ And that's it!
 
 
 ### Optional: Add Commands!
-BrenerBot is build with a high level of modularity in mind. You can add your own commands by creating command files anywhere under 'src/commands' and
-conforming with the command structure, as specified in 'src/commands/commands.ts'.
+BrenerBot is build with a high level of modularity in mind. You can add your own commands by creating command files in a sub-directory under 'src/commands' and
+conforming with the command structure, as specified in 'src/commands/commands.ts'. Make sure to include this sub-directory in 'src/commands/categories.ts' and define the corresponding category name in native language.
 
 A command file should look like this:
 ```

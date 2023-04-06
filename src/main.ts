@@ -1,8 +1,9 @@
 // main.ts
 // (C) Martin Alebachew, 2023
 
-import { join } from "path"
+import { join, basename } from "path"
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "./commands/commands"
+import { dirToCategories } from "./commands/categories"
 import { GROUP_CHAT_SUFFIX, PRIVATE_CHAT_SUFFIX, phoneNumberToChat } from "./utils/phone";
 import { log } from "./log"
 import { GroupChat, Message, MessageTypes } from 'whatsapp-web.js'
@@ -21,18 +22,26 @@ const OWNER_SERIALIZED = phoneNumberToChat(config.countryCode, config.phoneNumbe
 log("Loading command files...")
 
 export let commandsDict: { [key: string]: Command } = { }
+export let commandsByCategories: { [key: string]: Command[] } = { }
 ;(function scanForCommandFiles(fullDir: string) {
     let filesystem = require("fs")
     filesystem.readdirSync(fullDir).forEach((filename: string) => {
         // For every file and directory under the commands directory:
-        if (!filename.endsWith("commands.js")) {  // "commands" defines the 'Command' type
+        if (!filename.endsWith("commands.js") && !filename.endsWith("categories.js")) {  // Both files are NOT commands
             let file = fullDir + '/' + filename  // Get full path
             if (filesystem.statSync(file).isDirectory())
                 scanForCommandFiles(file)
+                // TODO: limit to one level only
             else {
                 let command = require(file)
                 log("* Loaded " + file)
                 commandsDict[command.nativeText.name] = command
+
+                let category = dirToCategories[basename(fullDir)]
+                if (!category) throw Error(`No matching category for directory: ${basename(fullDir)}`)
+                if (!commandsByCategories[category])
+                    commandsByCategories[category] = []
+                commandsByCategories[category].push(command)
             }
         }
     });

@@ -76,8 +76,7 @@ let command: Command = {
     },
     nativeText: {
         name: "סטיקר",
-        description: "",
-        category: "סטיקרים"
+        description: ""
     },
     async execute(client: Client, msg: Message, args: string[]) {
         let media: MessageMedia
