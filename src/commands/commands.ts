@@ -17,12 +17,12 @@ export interface Command {
         groupChat: GroupChatPermissions,
         privateChat: PrivateChatPermissions
     },
-    
+
     // Text attributes in native language
-    nativeText: {  
+    nativeText: {
         name: string,
         description: string
     },
-    
+
     execute: (client: Client, msg: Message, args: string[]) => Promise<void>
 }
