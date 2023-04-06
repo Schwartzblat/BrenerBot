@@ -11,6 +11,7 @@ const STICKER_AUTHOR = "@martinalebachew on GitHub"
 const IMAGE_SIZE_PX = 800
 const IMAGE_PADDING_PX = 160
 const IMAGE_MIME_TYPE = "image/png"
+const STICKER_BG_COLORS = ['#63AF6F', '#6398AF', '#8463AF', '#AF6395', '#ADAF63']
 
 function textToImageB64(text: string) {
     // Set up font and canvas
@@ -19,7 +20,7 @@ function textToImageB64(text: string) {
     const ctx = canvas.getContext('2d')
 
     // Set up background color
-    ctx.fillStyle = '#63AF6F'
+    ctx.fillStyle = STICKER_BG_COLORS[~~(Math.random() * STICKER_BG_COLORS.length)]
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
     // Split every three words into a new line
