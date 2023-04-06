@@ -5,7 +5,7 @@ import { Command, GroupChatPermissions, PrivateChatPermissions } from "../comman
 import { cleanShutdown } from "../../main"
 import { Client, Message } from 'whatsapp-web.js'
 
-const NATIVE_SHUTDOWN_MESSAGE = "מכבה את ברנרבוט, להתראות 👋"
+const NATIVE_SHUTDOWN_MESSAGE = "להתראות 👋"
 
 let command: Command = {
     permissions: {
