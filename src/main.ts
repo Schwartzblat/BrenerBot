@@ -62,12 +62,13 @@ WhatsAppClient.on('message', async (msg: Message) => {
     if (!command) return
 
     // Processing Stage 2: Check message type
-    if (command.requestTypes)
-        if (!command.requestTypes.includes(msg.type))
-            return
-    else
-        if (msg.type !== MessageTypes.TEXT)
-            return
+    if (command.requestTypes) {
+        if (!command.requestTypes.includes(msg.type)) return
+    }
+    else {
+        if (msg.type !== MessageTypes.TEXT) return
+    }
+
 
     // Processing Stage 3: Verify permissions
     if (msg.from.endsWith(PRIVATE_CHAT_SUFFIX)) {  // Private chat
