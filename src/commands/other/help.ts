@@ -22,7 +22,7 @@ let command: Command = {
         for (let commandName in commandsDict) {
             helpMsg += "* !" + commandName + "\n"
         }
-        
+
         await msg.reply(helpMsg)
     }
 }
