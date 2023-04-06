@@ -69,7 +69,7 @@ WhatsAppClient.on('message', async (msg: Message) => {
         if (command.permissions.privateChat < senderPerms) return
     } else if (msg.from.endsWith("@g.us")) {  // Group chat
         let senderPerms
-        if (msg.from === OWNER_CHAT_ID) senderPerms = GroupChatPermissions.Owner
+        if (msg.author === OWNER_CHAT_ID) senderPerms = GroupChatPermissions.Owner
         else {
             let isAdmin = false
             ;(await msg.getChat() as GroupChat).participants.every((participant) => {
