@@ -3,10 +3,10 @@
 
 import { join } from "path"
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "./commands/commands"
-import { phoneNumberToChat, PRIVATE_CHAT_SUFFIX, GROUP_CHAT_SUFFIX } from "./utils/phone";
+import { GROUP_CHAT_SUFFIX, PRIVATE_CHAT_SUFFIX, phoneNumberToChat } from "./utils/phone";
 import { log } from "./log"
-import { GroupChat, Message } from 'whatsapp-web.js'
-const { Client, LocalAuth, MessageTypes } = require('whatsapp-web.js')
+import { GroupChat, Message, MessageTypes } from 'whatsapp-web.js'
+const { Client, LocalAuth } = require('whatsapp-web.js')
 const qrcode = require('qrcode-terminal')
 
 
@@ -54,15 +54,15 @@ WhatsAppClient.on('ready', () => {
 });
 
 WhatsAppClient.on('message', async (msg: Message) => {
-    // Processing Stage 1: Check message type
-    if (msg.type !== MessageTypes.TEXT) return
-
-    // Processing Stage 2: Obtain command
+    // Processing Stage 1: Obtain command
     let content = msg.body
     if (!content.startsWith(BOT_PREFIX)) return
 
     let command = commandsDict[content.substring(BOT_PREFIX.length)]
     if (!command) return
+
+    // Processing Stage 2: Check message type
+    if ((!command.requestTypes && msg.type === MessageTypes.TEXT) || (command.requestTypes && !command.requestTypes.includes(msg.type))) return
 
     // Processing Stage 3: Verify permissions
     if (msg.from.endsWith(PRIVATE_CHAT_SUFFIX)) {  // Private chat

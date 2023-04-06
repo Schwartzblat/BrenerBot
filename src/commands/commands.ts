@@ -1,7 +1,7 @@
 // commands.ts
 // (C) Martin Alebachew, 2023
 
-import { Client, Message } from 'whatsapp-web.js'
+import { Client, Message, MessageTypes } from 'whatsapp-web.js'
 
 export enum GroupChatPermissions {
     Nobody, Owner, Admin, Everyone
@@ -12,6 +12,7 @@ export enum PrivateChatPermissions {
 }
 
 export interface Command {
+    requestTypes?: MessageTypes[],  // Fallback is text message type
     permissions: {
         groupChat: GroupChatPermissions,
         privateChat: PrivateChatPermissions
