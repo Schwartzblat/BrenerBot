@@ -10,16 +10,17 @@ const { Client, LocalAuth, MessageTypes } = require('whatsapp-web.js')
 const qrcode = require('qrcode-terminal')
 
 
-// Hard coded preferences
-const BOT_PREFIX = "!"  // Prefix for all bot commands
-const OWNER_CHAT_ID = "<country-code><number>@c.us"  // Bot's owner phone number
+// Phase 0: Load configuration file
+const config  = require("../config.json")
+const BOT_PREFIX = config.botPrefix  // Prefix for all bot commands
+const OWNER_SERIALIZED = config.owenrSerialized  // Bot's owner phone number
 
 
 // Phase 1: Load commands
 // Load command files and extract commands
 log("Loading command files...")
 
-let commandsDict: { [key: string]: Command } = { }
+export let commandsDict: { [key: string]: Command } = { }
 ;(function scanForCommandFiles(fullDir: string) {
     let filesystem = require("fs")
     filesystem.readdirSync(fullDir).forEach((filename: string) => {
@@ -65,11 +66,11 @@ WhatsAppClient.on('message', async (msg: Message) => {
 
     // Processing Stage 3: Verify permissions
     if (msg.from.endsWith("@c.us")) {  // Private chat
-        let senderPerms = (msg.from === OWNER_CHAT_ID) ? PrivateChatPermissions.Owner : PrivateChatPermissions.Everyone
+        let senderPerms = (msg.from === OWNER_SERIALIZED) ? PrivateChatPermissions.Owner : PrivateChatPermissions.Everyone
         if (command.permissions.privateChat < senderPerms) return
     } else if (msg.from.endsWith("@g.us")) {  // Group chat
         let senderPerms
-        if (msg.author === OWNER_CHAT_ID) senderPerms = GroupChatPermissions.Owner
+        if (msg.author === OWNER_SERIALIZED) senderPerms = GroupChatPermissions.Owner
         else {
             let isAdmin = false
             ;(await msg.getChat() as GroupChat).participants.every((participant) => {

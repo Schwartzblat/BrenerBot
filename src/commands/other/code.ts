@@ -1,4 +1,4 @@
-// about.ts
+// code.ts
 // (C) Martin Alebachew, 2023
 
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "../commands"
@@ -10,12 +10,12 @@ let command: Command = {
         privateChat: PrivateChatPermissions.Everyone
     },
     nativeText: {
-        name: "אודות",
-        description: "מי אני ומה שמי",
-        category: "כללי"
+        name: "קוד",
+        description: "",
+        category: "אחר"
     },
     async execute(client: Client, msg: Message) {
-        await msg.reply("שלום! אני ברנרבוט 👋")
+        await msg.reply("https://github.com/martinalebachew/BrenerBot")
     }
 }
 

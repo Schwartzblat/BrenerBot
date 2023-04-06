@@ -1,6 +1,9 @@
 # Build directory
 build
 
+# configuration file
+config.json
+
 # MacOS files
 .DS_Store
 
