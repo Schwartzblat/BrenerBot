@@ -4,11 +4,11 @@
 import { Client, Message } from 'whatsapp-web.js'
 
 export enum GroupChatPermissions {
-    Owner, Admin, Everyone
+    Nobody, Owner, Admin, Everyone
 }
 
 export enum PrivateChatPermissions {
-    Owner, Everyone
+    Nobody, Owner, Everyone
 }
 
 export interface Command {
