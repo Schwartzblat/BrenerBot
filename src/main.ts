@@ -58,7 +58,11 @@ WhatsAppClient.on('message', async (msg: Message) => {
     let content = msg.body
     if (!content.startsWith(BOT_PREFIX)) return
 
-    let command = commandsDict[content.substring(BOT_PREFIX.length)]
+    let args = content.substring(BOT_PREFIX.length).split(" ")
+    let prompt = args.shift()
+    if (!prompt) return
+
+    let command = commandsDict[prompt]
     if (!command) return
 
     // Processing Stage 2: Check message type
@@ -68,7 +72,6 @@ WhatsAppClient.on('message', async (msg: Message) => {
     else {
         if (msg.type !== MessageTypes.TEXT) return
     }
-
 
     // Processing Stage 3: Verify permissions
     if (msg.from.endsWith(PRIVATE_CHAT_SUFFIX)) {  // Private chat
@@ -93,7 +96,7 @@ WhatsAppClient.on('message', async (msg: Message) => {
 
     // Processing Stage 4: Execute command
     log("---> Executing command", command.nativeText.name, "from", msg.author ?? msg.from)
-    await command.execute(WhatsAppClient, msg)
+    await command.execute(WhatsAppClient, msg, args)
 })
 
 export async function cleanShutdown() {  // Required for auth persistence

@@ -25,5 +25,5 @@ export interface Command {
         category: string
     },
     
-    execute: (client: Client, msg: Message) => Promise<void>
+    execute: (client: Client, msg: Message, args: string[]) => Promise<void>
 }

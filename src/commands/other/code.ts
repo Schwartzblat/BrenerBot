@@ -14,7 +14,8 @@ let command: Command = {
         description: "",
         category: "אחר"
     },
-    async execute(client: Client, msg: Message) {
+    async execute(client: Client, msg: Message, args: string[]) {
+        if (args.length) return
         await msg.reply("https://github.com/martinalebachew/BrenerBot")
     }
 }

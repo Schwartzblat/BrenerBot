@@ -17,7 +17,8 @@ let command: Command = {
         description: "",
         category: "אחר"
     },
-    async execute(client: Client, msg: Message) {
+    async execute(client: Client, msg: Message, args: string[]) {
+        if (args.length) return
         let helpMsg = NATIVE_HELP_HEADER
         for (let commandName in commandsDict) {
             helpMsg += "* !" + commandName + "\n"
