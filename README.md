@@ -58,25 +58,23 @@ npm install
 
 This project contains three built-in scripts, written for unix and unix-like systems. On other operating systems, mainly windows, you will need to manually edit those scripts and replace OS-specific commands (currently only `rm -r build`).
 
-#### Compile: Recompile TypeScript files into JavaScript
+#### Build: Compile TypeScript files into JavaScript
 
 ```
-npm run compile
+npm run build
 ```
 
-#### Run: Run BrenerBot
+#### Start: Run BrenerBot from compiled build
 
 ```
 npm run run
 ```
 
-#### Start: Recompile & Run!
-
-```
-npm start
-```
-
 And that's it!
+
+There's also an alternative version of the build script for Heroku deployments. `heroku-postbuild` installs packages required
+for `canvas` library using `sudo apt-get`.
+
 
 ### Optional: Add Commands!
 

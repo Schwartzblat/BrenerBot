@@ -4,9 +4,9 @@
   "description": "WhatsApp Utility Bot",
   "main": "build/main.js",
   "scripts": {
-    "start": "rm -r build & npx tsc && node .",
-    "compile": "rm -r build & npx tsc",
-    "run": "node ."
+    "start": "node .",
+    "build": "rm -r build & npx tsc",
+    "heroku-postbuild": "sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev & npx tsc"
   },
   "repository": {
     "type": "git",
