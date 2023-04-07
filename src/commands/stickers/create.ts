@@ -73,7 +73,7 @@ function splitLinesIntoSquare(text: string, ctx: CanvasRenderingContext2D) {
 }
 
 function textToImageBase64(text: string) {
-    text = text.replace("\n", "")  // Strip line breaks
+    text = text.replace("\n", " ")  // Strip line breaks
 
     // Set up font and canvas
     registerFont("fonts/Assistant/Bold.ttf", { family: "StickerFont" })
