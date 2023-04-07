@@ -85,7 +85,7 @@ conforming with the command structure, as specified in 'src/commands/commands.ts
 
 A command file should look like this:
 
-```
+```typescript
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "../commands"
 import { Client, Message } from 'whatsapp-web.js'
 
