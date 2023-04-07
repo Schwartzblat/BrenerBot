@@ -108,6 +108,12 @@ module.exports = command
 Share your commands with us :)
 
 ### Running BrenerBot on Heroku
+Add the following buildpacks in your app:
+- https://github.com/heroku/heroku-buildpack-nodejs
+- https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
+- https://github.com/jontewks/puppeteer-heroku-buildpack
+- https://github.com/heroku/heroku-buildpack-google-chrome
+
 To run BrenerBot on Heroku, follow the next steps:
 1. Download BrenerBot onto your local machine.
 2. Configure config.json as [mentioned above](#configure-your-bot).
