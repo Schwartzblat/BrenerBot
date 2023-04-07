@@ -72,9 +72,6 @@ npm run run
 
 And that's it!
 
-There's also an alternative version of the build script for Heroku deployments. `heroku-postbuild` installs packages required
-for `canvas` library using `sudo apt-get`.
-
 
 ### Optional: Add Commands!
 
