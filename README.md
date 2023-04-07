@@ -6,16 +6,26 @@ Designed mainly for group chats!
 > **Warning**
 > BrenerBot relies on WhatsApp-Web.js to connect to the WhatsApp API. The connection _should_ be stable and not trigger any bans. However, WhatsApp hates fun, so consider it as a possibility, don't do anything stupid and pay attention to the API limits.
 
-## Features
+## Functionality
 
-| Feature                     | Availability |
-| :-------------------------- | :----------- |
-| Create stickers from text   | 🚧           |
-| Create stickers from images | ✅           |
-| Create stickers from videos | ✅           |
-| Create stickers from GIFs   | ✅           |
-| View source code            | ✅           |
-| View all commands           | 🚧           |
+| Command                                               | Description                 | Availability |
+| :---------------------------------------------------- | :-------------------------- | :----------- |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from text   | 🚧           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from images | ✅           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from videos | ✅           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from GIFs   | ✅           |
+| [admin/shutdown.ts](src/commands/admin/shutdown.ts)   | Remote termination by owner | ✅           |
+| [other/code.ts](src/commands/other/code.ts)           | View source code            | ✅           |
+| [other/help.ts](src/commands/other/help.ts)           | View all commands           | 🚧           |
+
+### Features
+
+| Feature                     | Branch          | Availability |
+| :-------------------------- | :-------------- | :----------- |
+| Advanced logging            | feature/logging | 🚧           |
+| Heroku compatibility        | feature/heroku  | 🚧           |
+| WebSocket connection        |                 | ❌           |
+
 
 ## Getting started
 
