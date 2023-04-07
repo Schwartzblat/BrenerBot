@@ -112,6 +112,7 @@ To run BrenerBot on Heroku, follow the next steps:
 1. Download BrenerBot onto your local machine.
 2. Configure config.json as [mentioned above](#configure-your-bot).
 3. Run BrenerBot and log in to WhatsApp.
-4. Push all the files in the directory to Heroku's git.
+4. Remove .gitignore entries for WhatsApp auth files & configuration file (two first entries).
+5. Push all the files in the directory to Heroku's git.
 
 🚧 Future versions will support GitHub deployment to simplify this process.

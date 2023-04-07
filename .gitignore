@@ -1,14 +1,14 @@
-# Build directory
-build
+# WhatsApp auth files
+.wwebjs_auth
 
-# configuration file
+# Configuration file
 config.json
 
 # MacOS files
 .DS_Store
 
-# WhatsApp auth files
-.wwebjs_auth
+# Build directory
+build
 
 # JetBrains IDEs
 .idea
