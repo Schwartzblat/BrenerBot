@@ -5,7 +5,7 @@ import { join, basename } from "path"
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "./commands/commands"
 import { dirToCategories } from "./commands/categories"
 import { GROUP_CHAT_SUFFIX, PRIVATE_CHAT_SUFFIX, phoneNumberToChat } from "./utils/phone";
-import { log } from "./log"
+import { log, newLine } from "./log"
 import { GroupChat, Message, MessageTypes } from 'whatsapp-web.js'
 const { Client, LocalAuth } = require('whatsapp-web.js')
 const qrcode = require('qrcode-terminal')
@@ -56,11 +56,12 @@ const WhatsAppClient = new Client({
 
 WhatsAppClient.on('qr', (qr: string) => {
     qrcode.generate(qr, { small: true });
-});
+})
 
 WhatsAppClient.on('ready', () => {
-    log('\nConnected to WhatsApp.');
-});
+    newLine()
+    log('Connected to WhatsApp.')
+})
 
 WhatsAppClient.on('message', async (msg: Message) => {
     // Processing Stage 1: Obtain command
@@ -109,14 +110,16 @@ WhatsAppClient.on('message', async (msg: Message) => {
 })
 
 export async function cleanShutdown() {  // Required for auth persistence
-    console.log('\nTerminating...');
-    await WhatsAppClient.destroy();
-    console.log('Closed WhatsApp connection.');
-    process.exit(0);
+    newLine()
+    log('Terminating...')
+
+    await WhatsAppClient.destroy()
+    log('Closed WhatsApp connection.')
+    process.exit(0)
 }
 
-process.on('SIGINT', cleanShutdown);   // CTRL+C
-process.on('SIGQUIT', cleanShutdown);  // Keyboard quit
-process.on('SIGTERM', cleanShutdown);  // `kill` command
+process.on('SIGINT', cleanShutdown)   // CTRL+C
+process.on('SIGQUIT', cleanShutdown)  // Keyboard quit
+process.on('SIGTERM', cleanShutdown)  // `kill` command
 
-WhatsAppClient.initialize();
+WhatsAppClient.initialize()
