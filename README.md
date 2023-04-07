@@ -25,7 +25,7 @@ Create a config.json file from the config.json.example file:
 
 _config.json_
 
-```
+```json
 {
     "botPrefix": "!",
     "countryCode": "US",
