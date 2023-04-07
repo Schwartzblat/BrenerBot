@@ -12,9 +12,19 @@ const qrcode = require('qrcode-terminal')
 
 
 // Phase 0: Load configuration file
-const config  = require("../config.json")
-const BOT_PREFIX = config.botPrefix  // Prefix for all bot commands
-const OWNER_SERIALIZED = phoneNumberToChat(config.countryCode, config.phoneNumber)  // Bot's owner phone number
+let filesystem = require("fs")
+let config
+
+if (filesystem.existsSync("../config.json")) {
+    log("Loading configuration from config.json...")
+    config  = require("../config.json")
+} else log("Loading configuration from environment variables...")
+
+const BOT_PREFIX = config?.botPrefix || process.env.BOT_PREFIX  // Prefix for all bot commands
+const OWNER_SERIALIZED = phoneNumberToChat(  // Bot's owner phone number
+    config?.countryCode || process.env.COUNTRY_CODE,
+    config?.phoneNumber || process.env.PHONE_NUMBER
+)
 
 
 // Phase 1: Load commands
@@ -24,7 +34,6 @@ log("Loading command files...")
 export let commandsDict: { [key: string]: Command } = { }
 export let commandsByCategories: { [key: string]: Command[] } = { }
 ;(function scanForCommandFiles(fullDir: string) {
-    let filesystem = require("fs")
     filesystem.readdirSync(fullDir).forEach((filename: string) => {
         // For every file and directory under the commands directory:
         if (!filename.endsWith("commands.js") && !filename.endsWith("categories.js")) {  // Both files are NOT commands
