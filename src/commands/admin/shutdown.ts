@@ -2,7 +2,7 @@
 // (C) Martin Alebachew, 2023
 
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "../commands"
-import { cleanShutdown } from "../../main"
+import { cleanShutdown } from "../../index"
 import { Client, Message } from 'whatsapp-web.js'
 
 const NATIVE_SHUTDOWN_MESSAGE = "להתראות 👋"

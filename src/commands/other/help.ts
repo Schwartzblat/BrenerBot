@@ -2,7 +2,7 @@
 // (C) Martin Alebachew, 2023
 
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "../commands"
-import { commandsDict } from "../../main";
+import { commandsDict } from "../../index";
 import { Client, Message } from 'whatsapp-web.js'
 
 const NATIVE_HELP_HEADER = "*היי, אני ברנרבוט 👋*\nהנה הפקודות שלי:\n\n"

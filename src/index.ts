@@ -1,4 +1,4 @@
-// main.ts
+// index.ts
 // (C) Martin Alebachew, 2023
 
 import { join, basename } from "path"

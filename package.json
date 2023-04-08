@@ -2,7 +2,7 @@
   "name": "brenerbot",
   "version": "1.0.0",
   "description": "WhatsApp Utility Bot",
-  "main": "build/main.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "rm -r build & npx tsc && node .",
     "compile": "rm -r build & npx tsc",
