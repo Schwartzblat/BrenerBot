@@ -38,4 +38,13 @@ export class WhatsAppConnection {
     async reply(message: MessageBase, text: string) {
         await this._conn.sendMessage(message.chat.serialized, { text: text }, { quoted: message.raw })
     }
+
+    async stickerReply(message: MessageBase, buffer: Buffer) {
+        await this._conn.sendMessage(message.chat.serialized, {
+            sticker: buffer,
+            isAnimated: false
+        }, {
+            quoted: message.raw
+        })
+    }
 }

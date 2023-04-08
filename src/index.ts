@@ -95,5 +95,5 @@ async function messageCallback(message: TextMessage, type: string ) {
 
     // Processing Stage 4: Execute command
     log("---> Executing command", commandObj.nativeText.name, "from", message.author.serialized)
-    await commandObj.execute(whatsapp, message, args)
+    await commandObj.execute(whatsapp, message, type, args)
 }
