@@ -7,6 +7,7 @@ Designed mainly for group chats!
 > BrenerBot relies on WhatsApp-Web.js to connect to the WhatsApp API. The connection _should_ be stable and not trigger any bans. However, WhatsApp hates fun, so consider it as a possibility, don't do anything stupid and pay attention to the API limits.
 
 ## Functionality
+### Commands
 
 | Command                                               | Description                 | Availability |
 | :---------------------------------------------------- | :-------------------------- | :----------- |
