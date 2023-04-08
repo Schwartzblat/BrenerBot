@@ -25,5 +25,5 @@ export interface Command {
         description: string
     },
 
-    execute: (client: WhatsAppConnection, msg: MessageBase, args: string[]) => Promise<void>
+    execute: (client: WhatsAppConnection, msg: MessageBase, type: string, args: string[]) => Promise<void>
 }
