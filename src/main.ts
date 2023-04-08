@@ -5,7 +5,7 @@ import { join, basename } from "path"
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "./commands/commands"
 import { dirToCategories } from "./commands/categories"
 import { GROUP_CHAT_SUFFIX, PRIVATE_CHAT_SUFFIX, phoneNumberToChat } from "./utils/phone";
-import { log } from "./log"
+import { log } from "./utils/log"
 import { GroupChat, Message, MessageTypes } from 'whatsapp-web.js'
 const { Client, LocalAuth } = require('whatsapp-web.js')
 const qrcode = require('qrcode-terminal')
