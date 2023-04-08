@@ -9,22 +9,22 @@ export enum Server {
 export class Address {
     private _id: string
     private _server: Server
-    private _serialized: string
+    public serialized: string
 
     constructor(id: number, server: Server) {
         this._id = id.toString()
         this._server = server
-        this._serialized = this._serialize()
+        this.serialized = this._serialize()
     }
 
     public set id (id: number) {
         this._id = id.toString()
-        this._serialized = this._serialize()
+        this.serialized = this._serialize()
     }
 
     public set server (server: Server) {
         this._server = server
-        this._serialized = this._serialize()
+        this.serialized = this._serialize()
     }
 
     private _serialize() {
@@ -32,7 +32,11 @@ export class Address {
     }
 
     public toString() {
-        return this._serialized;
+        return this.serialized;
+    }
+
+    public equals(other: any) {
+        return other instanceof Address && this.serialized === other.serialized;
     }
 
     public static parse(serialized: string): Address {
