@@ -2,7 +2,7 @@
 // (C) Martin Alebachew, 2023
 
 import { Address, GroupAddress, UserAddress } from "./address"
-import {proto, WAMessage} from "@adiwajshing/baileys"
+import { WAMessage } from "@adiwajshing/baileys"
 
 export class MessageBase {
     public author: UserAddress
