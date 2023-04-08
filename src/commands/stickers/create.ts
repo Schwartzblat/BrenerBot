@@ -5,6 +5,7 @@ import { Command, GroupChatPermissions, PrivateChatPermissions } from "../comman
 import { WhatsAppConnection } from "../../whatsapp-api/client"
 import { MessageBase } from "../../whatsapp-api/message"
 import { CanvasRenderingContext2D, createCanvas, registerFont } from 'canvas';
+const sharp = require("sharp")
 
 const STICKER_NAME = "BrenerBot"
 const STICKER_AUTHOR = "@martinalebachew on GitHub"
@@ -12,11 +13,19 @@ const STICKER_AUTHOR = "@martinalebachew on GitHub"
 const IMAGE_SIZE_PX = 800
 const IMAGE_PADDING_PX = 160
 
-const IMAGE_MIME_TYPE = "image/png"
 const STICKER_BG_COLORS = ['#63AF6F', '#6398AF', '#8463AF', '#AF6395', '#ADAF63']
 
 const TESTING_FONT_SIZE = 20
 const LINE_HEIGHT_MULTIPLIER = 0.92
+
+const STICKER_METADATA = JSON.stringify(
+    {
+        "sticker-pack-id": "martinalebachew/BrenerBot",
+        "sticker-pack-name": STICKER_NAME,
+        "sticker-pack-publisher": STICKER_AUTHOR,
+        "emojis": [""]
+    }
+)
 
 class Line {
     content: string
@@ -73,7 +82,7 @@ function splitLinesIntoSquare(text: string, ctx: CanvasRenderingContext2D) {
     // Note: longestLine, squareWidth, squareHeight, squareDiff, squarePrevDiff are now OUTDATED
 }
 
-function textToImageBuffer(text: string) {
+async function textToImageBuffer(text: string) {
     text = text.replace(/\n+/g, " ")  // Strip line breaks
 
     // Set up font and canvas
@@ -114,8 +123,12 @@ function textToImageBuffer(text: string) {
         ctx.fillText(lines[i].content, x, y + i * (fontSize * LINE_HEIGHT_MULTIPLIER))
     }
 
-    // Return base64 image
-    return canvas.toBuffer(IMAGE_MIME_TYPE)
+    const pngBuffer = canvas.toBuffer("image/png")
+    const sharpInstance = sharp(pngBuffer)
+    sharpInstance.webp({ metadata: STICKER_METADATA })
+
+    // Return WebP buffer with sticker properties
+    return await sharpInstance.toBuffer()
 }
 
 let command: Command = {
@@ -137,7 +150,7 @@ let command: Command = {
         //     media = await message.downloadMedia()
         // } else return
 
-        await whatsapp.stickerReply(message, textToImageBuffer(args.join(" ")))
+        await whatsapp.stickerReply(message, await textToImageBuffer(args.join(" ")))
         // TODO: change name and author
     }
 }
