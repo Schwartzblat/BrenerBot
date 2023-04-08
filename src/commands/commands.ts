@@ -12,7 +12,7 @@ export enum PrivateChatPermissions {
 }
 
 export interface Command {
-    requestTypes?: MessageTypes[],  // Fallback is text message type
+    requestTypes: MessageTypes[],  // Fallback is text message type
     permissions: {
         groupChat: GroupChatPermissions,
         privateChat: PrivateChatPermissions

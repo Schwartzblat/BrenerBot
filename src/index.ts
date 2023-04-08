@@ -4,17 +4,20 @@
 import { join, basename } from "path"
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "./commands/commands"
 import { dirToCategories } from "./commands/categories"
-import { GROUP_CHAT_SUFFIX, PRIVATE_CHAT_SUFFIX, phoneNumberToChat } from "./utils/phone";
 import { log } from "./utils/log"
-import { GroupChat, Message, MessageTypes } from 'whatsapp-web.js'
-const { Client, LocalAuth } = require('whatsapp-web.js')
-const qrcode = require('qrcode-terminal')
+import { WhatsAppConnection } from "./whatsapp-api/client"
+import { MessageBase, TextMessage } from "./whatsapp-api/message"
+import { UserAddress} from "./whatsapp-api/address";
+import { parsePhoneNumber } from "libphonenumber-js"
+import { GroupParticipant } from "@adiwajshing/baileys";
 
 
 // Phase 0: Load configuration file
 const config  = require("../config.json")
 const BOT_PREFIX = config.botPrefix  // Prefix for all bot commands
-const OWNER_SERIALIZED = phoneNumberToChat(config.countryCode, config.phoneNumber)  // Bot's owner phone number
+
+let phoneNumber = parsePhoneNumber(config.phoneNumber, config.country)
+const OWNER_ADDRESS = new UserAddress(parseInt(phoneNumber.countryCallingCode + phoneNumber.nationalNumber))  // Bot owner's address
 
 
 // Phase 1: Load commands
@@ -49,74 +52,48 @@ export let commandsByCategories: { [key: string]: Command[] } = { }
 
 
 // Phase 2: Connect to WhatsApp
-const WhatsAppClient = new Client({
-    authStrategy: new LocalAuth(),  // Try to restore last session
-    puppeteer: { handleSIGINT: false }  // Required for auth persistence
-})
+const whatsapp = new WhatsAppConnection()
+whatsapp.authenticate().then(() => { whatsapp.setCallback(messageCallback) })
 
-WhatsAppClient.on('qr', (qr: string) => {
-    qrcode.generate(qr, { small: true });
-});
+async function messageCallback(message: TextMessage, type: string ) {
+    /* Pre-processing: This function is called only on messages
+    of a supported type and have been sent while the bot is online. */
 
-WhatsAppClient.on('ready', () => {
-    log('\nConnected to WhatsApp.');
-});
-
-WhatsAppClient.on('message', async (msg: Message) => {
     // Processing Stage 1: Obtain command
-    let content = msg.body
+    let content = message.text
     if (!content.startsWith(BOT_PREFIX)) return
 
     let args = content.substring(BOT_PREFIX.length).split(" ")
-    let prompt = args.shift()
-    if (!prompt) return
+    let commandKey = args.shift()
+    if (!commandKey) return
 
-    let command = commandsDict[prompt]
-    if (!command) return
+    let commandObj = commandsDict[commandKey]
+    if (!commandObj) return
 
     // Processing Stage 2: Check message type
-    if (command.requestTypes) {
-        if (!command.requestTypes.includes(msg.type)) return
-    }
-    else {
-        if (msg.type !== MessageTypes.TEXT) return
-    }
+    if (!commandObj.requestTypes.includes(type)) return
 
     // Processing Stage 3: Verify permissions
-    if (msg.from.endsWith(PRIVATE_CHAT_SUFFIX)) {  // Private chat
-        let senderPerms = (msg.from === OWNER_SERIALIZED) ? PrivateChatPermissions.Owner : PrivateChatPermissions.Everyone
-        if (command.permissions.privateChat < senderPerms) return
-    } else if (msg.from.endsWith(GROUP_CHAT_SUFFIX)) {  // Group chat
+    if (!message.inGroup) {  // Private chat
+        let senderPerms = (message.author === OWNER_ADDRESS) ? PrivateChatPermissions.Owner : PrivateChatPermissions.Everyone
+        if (commandObj.permissions.privateChat < senderPerms) return
+    } else {  // Group chat
         let senderPerms
-        if (msg.author === OWNER_SERIALIZED) senderPerms = GroupChatPermissions.Owner
+        if (message.author === OWNER_ADDRESS) senderPerms = GroupChatPermissions.Owner
         else {
-            let isAdmin = false
-            ;(await msg.getChat() as GroupChat).participants.every((participant) => {
-                if (participant.id._serialized === msg.author) {
-                    isAdmin = participant.isAdmin
-                } else return true  // Continue iterating through participants
+            let groupMetadata = await whatsapp.fetchGroupMetadata(message.chat)
+            let participant = groupMetadata.participants.find((participant: GroupParticipant) => {
+                return participant.id === message.author.serialized
             })
 
+            let isAdmin = participant.isAdmin || participant.isSuperAdmin
             senderPerms = isAdmin ? GroupChatPermissions.Admin : GroupChatPermissions.Everyone
         }
 
-        if (command.permissions.groupChat < senderPerms) return
-    } else return
+        if (commandObj.permissions.groupChat < senderPerms) return
+    }
 
     // Processing Stage 4: Execute command
-    log("---> Executing command", command.nativeText.name, "from", msg.author ?? msg.from)
-    await command.execute(WhatsAppClient, msg, args)
-})
-
-export async function cleanShutdown() {  // Required for auth persistence
-    console.log('\nTerminating...');
-    await WhatsAppClient.destroy();
-    console.log('Closed WhatsApp connection.');
-    process.exit(0);
+    log("---> Executing command", commandObj.nativeText.name, "from", message.author)
+    await commandObj.execute(whatsapp, message, args)
 }
-
-process.on('SIGINT', cleanShutdown);   // CTRL+C
-process.on('SIGQUIT', cleanShutdown);  // Keyboard quit
-process.on('SIGTERM', cleanShutdown);  // `kill` command
-
-WhatsAppClient.initialize();

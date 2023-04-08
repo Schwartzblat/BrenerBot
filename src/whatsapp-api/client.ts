@@ -20,12 +20,18 @@ export class WhatsAppConnection {
         this._conn.ev.on("creds.update", saveCreds)
     }
 
-    async setCallback(messageCallback: (message: MessageBase) => Promise<void>) {
+    async setCallback(messageCallback: (message: TextMessage, type: string) => Promise<void>) {
         this._conn.ev.on("messages.upsert", ({ messages, type }: { messages: WAMessage[], type: MessageUpsertType }) => {
             if (type === "notify")  // Handle only messages sent while BrenerBot is up
-                messages.forEach((message) => {
-                    messageCallback(MessageBase.parse(message))
+                messages.forEach((rawMessage) => {
+                    const parsed = MessageBase.parse(rawMessage)
+                    if (parsed?.message) messageCallback(parsed.message as TextMessage, parsed.type)  // Processes only supported message types
                 })
         })
+    }
+
+    async fetchGroupMetadata(address: GroupAddress) {
+        const allGroupsMetadata = await this._conn.groupFetchAllParticipating()
+        return allGroupsMetadata[address.serialized]
     }
 }
