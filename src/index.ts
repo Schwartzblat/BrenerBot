@@ -16,7 +16,7 @@ import { GroupParticipant } from "@adiwajshing/baileys";
 const config  = require("../config.json")
 const BOT_PREFIX = config.botPrefix  // Prefix for all bot commands
 
-let phoneNumber = parsePhoneNumber(config.phoneNumber, config.country)
+let phoneNumber = parsePhoneNumber(config.phoneNumber, config.countryCode)
 const OWNER_ADDRESS = new UserAddress(parseInt(phoneNumber.countryCallingCode + phoneNumber.nationalNumber))  // Bot owner's address
 
 
