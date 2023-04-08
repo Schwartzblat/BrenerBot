@@ -75,11 +75,11 @@ async function messageCallback(message: TextMessage, type: string ) {
 
     // Processing Stage 3: Verify permissions
     if (!message.inGroup) {  // Private chat
-        let senderPerms = (message.author === OWNER_ADDRESS) ? PrivateChatPermissions.Owner : PrivateChatPermissions.Everyone
+        let senderPerms = (message.author.equals(OWNER_ADDRESS)) ? PrivateChatPermissions.Owner : PrivateChatPermissions.Everyone
         if (commandObj.permissions.privateChat < senderPerms) return
     } else {  // Group chat
         let senderPerms
-        if (message.author === OWNER_ADDRESS) senderPerms = GroupChatPermissions.Owner
+        if (message.author.equals(OWNER_ADDRESS)) senderPerms = GroupChatPermissions.Owner
         else {
             let groupMetadata = await whatsapp.fetchGroupMetadata(message.chat)
             let participant = groupMetadata.participants.find((participant: GroupParticipant) => {
