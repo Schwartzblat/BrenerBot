@@ -18,9 +18,9 @@ let command: Command = {
         description: ""
     },
 
-    async execute(client: WhatsAppConnection, msg: MessageBase, args: string[]) {
+    async execute(client: WhatsAppConnection, message: MessageBase, args: string[]) {
         if (args.length) return
-        await msg.reply("https://github.com/martinalebachew/BrenerBot")
+        await client.reply(message, "https://github.com/martinalebachew/BrenerBot")
     }
 }
 

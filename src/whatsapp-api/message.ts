@@ -2,17 +2,19 @@
 // (C) Martin Alebachew, 2023
 
 import { Address, GroupAddress, UserAddress } from "./address"
-import { WAMessage, getContentType, proto } from "@adiwajshing/baileys"
+import { WAMessage, getContentType } from "@adiwajshing/baileys"
 
 export class MessageBase {
     public author: UserAddress
     public chat: UserAddress | GroupAddress
     public inGroup: boolean
+    public raw: WAMessage
 
-    constructor(author: UserAddress, chat: UserAddress | GroupAddress, inGroup: boolean) {
+    constructor(rawMessage: WAMessage, author: UserAddress, chat: UserAddress | GroupAddress, inGroup: boolean) {
         this.author = author
         this.chat = chat
         this.inGroup = inGroup
+        this.raw = rawMessage
     }
 
     public static parse(message: WAMessage): { message: MessageBase, type: string } | undefined {
@@ -26,7 +28,7 @@ export class MessageBase {
         let type = getContentType(message.message ?? undefined)
 
         if (type === "conversation")  // Text message
-            return { message: new TextMessage(author, chat, message.message?.conversation ?? "", inGroup), type: type }
+            return { message: new TextMessage(message, author, chat, message.message?.conversation ?? "", inGroup), type: type }
         else  // Unsupported message type
             return
     }
@@ -35,8 +37,8 @@ export class MessageBase {
 export class TextMessage extends MessageBase {
     public text: string
 
-    constructor(author: UserAddress, chat: UserAddress | GroupAddress, text: string, inGroup: boolean) {
-        super(author, chat, inGroup)
+    constructor(rawMessage: WAMessage, author: UserAddress, chat: UserAddress | GroupAddress, text: string, inGroup: boolean) {
+        super(rawMessage, author, chat, inGroup)
         this.text = text
     }
 }

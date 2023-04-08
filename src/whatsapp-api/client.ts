@@ -34,4 +34,8 @@ export class WhatsAppConnection {
         const allGroupsMetadata = await this._conn.groupFetchAllParticipating()
         return allGroupsMetadata[address.serialized]
     }
+
+    async reply(message: MessageBase, text: string) {
+        await this._conn.sendMessage(message.chat.serialized, { text: text }, { quoted: message.raw })
+    }
 }

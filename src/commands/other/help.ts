@@ -21,14 +21,14 @@ let command: Command = {
         description: ""
     },
 
-    async execute(client: WhatsAppConnection, msg: MessageBase, args: string[]) {
+    async execute(client: WhatsAppConnection, message: MessageBase, args: string[]) {
         if (args.length) return
         let helpMsg = NATIVE_HELP_HEADER
         for (let commandName in commandsDict) {
             helpMsg += "* !" + commandName + "\n"
         }
 
-        await msg.reply(helpMsg)
+        await client.reply(message, helpMsg)
     }
 }
 
