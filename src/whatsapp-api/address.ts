@@ -34,16 +34,28 @@ export class Address {
     public toString() {
         return this._serialized;
     }
+
+    public static parse(serialized: string): Address {
+        if (serialized.endsWith(Server.User)) {
+            let id = parseInt(serialized.substring(0, serialized.length - Server.User.length))
+            return new UserAddress(id)
+        } else if (serialized.endsWith(Server.Group)) {
+            let id = parseInt(serialized.substring(0, serialized.length - Server.Group.length))
+            return new GroupAddress(id)
+        } else {
+            throw Error("Failed to parse address!")
+        }
+    }
 }
 
 export class UserAddress extends Address {
-    constructor(groupId: number) {
-        super(groupId, Server.User);
+    constructor(userId: number) {
+        super(userId, Server.User);
     }
 }
 
 export class GroupAddress extends Address {
-    constructor(userId: number) {
-        super(userId, Server.Group);
+    constructor(groupId: number) {
+        super(groupId, Server.Group);
     }
 }

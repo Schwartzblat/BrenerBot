@@ -2,6 +2,8 @@
 // (C) Martin Alebachew, 2023
 
 import makeWASocket, { WAMessage, MessageUpsertType, useMultiFileAuthState } from "@adiwajshing/baileys"
+import { GroupAddress, UserAddress } from "./address"
+import { MessageBase, TextMessage } from "./message"
 let pino = require("pino")
 
 export class WhatsAppConnection {
@@ -18,10 +20,12 @@ export class WhatsAppConnection {
         this._conn.ev.on("creds.update", saveCreds)
     }
 
-    async setCallback(messageCallback: (message: WAMessage) => Promise<void>) {
+    async setCallback(messageCallback: (message: MessageBase) => Promise<void>) {
         this._conn.ev.on("messages.upsert", ({ messages, type }: { messages: WAMessage[], type: MessageUpsertType }) => {
-            if (type === "notify")  // Handle only messages sent while bot is up
-                messages.forEach(messageCallback)
+            if (type === "notify")  // Handle only messages sent while BrenerBot is up
+                messages.forEach((message) => {
+                    messageCallback(MessageBase.parse(message))
+                })
         })
     }
 }

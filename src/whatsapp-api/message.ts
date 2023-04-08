@@ -1,7 +1,9 @@
 // message.ts
 // (C) Martin Alebachew, 2023
 
-import { GroupAddress, UserAddress } from "./address"
+import { Address, GroupAddress, UserAddress } from "./address"
+import {proto, WAMessage} from "@adiwajshing/baileys"
+import ImageMessage = proto.Message.ImageMessage;
 
 export class MessageBase {
     public author: UserAddress
@@ -10,6 +12,14 @@ export class MessageBase {
     constructor(author: UserAddress, chat: UserAddress | GroupAddress) {
         this.author = author
         this.chat = chat
+    }
+
+    public static parse(message: WAMessage): MessageBase {
+        let author = Address.parse(message.key?.id ?? "")
+        let chat = Address.parse(message.message?.chat?.id ?? "")
+
+        // if (message.message?.imageMessage) return new ImageMessage(author, chat, )
+        return new TextMessage(author, chat, message.message?.conversation ?? "")
     }
 }
 
@@ -26,7 +36,3 @@ export class TextMessage extends MessageBase {
 //     text: string
 //     image:
 // }
-
-export function wrapMessage(message: WAMessage): MessageBase {
-
-}
