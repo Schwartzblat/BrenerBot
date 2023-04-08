@@ -3,7 +3,6 @@
 
 import { Address, GroupAddress, UserAddress } from "./address"
 import {proto, WAMessage} from "@adiwajshing/baileys"
-import ImageMessage = proto.Message.ImageMessage;
 
 export class MessageBase {
     public author: UserAddress
