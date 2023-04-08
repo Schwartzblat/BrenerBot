@@ -2,7 +2,7 @@
 // (C) Martin Alebachew, 2023
 
 export enum Server {
-    User = "@c.us",
+    User = "@s.whatsapp.net",  // c.us in selenium-based and puppeteer-based libraries
     Group = "@g.us"
 }
 
@@ -43,7 +43,7 @@ export class Address {
             let id = parseInt(serialized.substring(0, serialized.length - Server.Group.length))
             return new GroupAddress(id)
         } else {
-            throw Error("Failed to parse address!")
+            throw Error(`Failed to parse address: ${serialized}`)
         }
     }
 }

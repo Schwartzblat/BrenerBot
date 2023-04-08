@@ -15,8 +15,11 @@ export class MessageBase {
     }
 
     public static parse(message: WAMessage): MessageBase {
-        let author = Address.parse(message.key?.id ?? "")
-        let chat = Address.parse(message.message?.chat?.id ?? "")
+        let chat = Address.parse(message.key?.remoteJid ?? "")
+        let author
+
+        if (chat instanceof UserAddress) author = chat
+        else author = Address.parse(message.key?.participant ?? "")
 
         // if (message.message?.imageMessage) return new ImageMessage(author, chat, )
         return new TextMessage(author, chat, message.message?.conversation ?? "")
