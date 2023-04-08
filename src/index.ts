@@ -49,7 +49,7 @@ export let commandsByCategories: { [key: string]: Command[] } = { }
         }
     });
 })(join(__dirname, "commands"))  // Project's sub-directory for command files
-
+log("Loaded command.")
 
 // Phase 2: Connect to WhatsApp
 const whatsapp = new WhatsAppConnection()

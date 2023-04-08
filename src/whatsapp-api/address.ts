@@ -39,16 +39,14 @@ export class Address {
         return other instanceof Address && this.serialized === other.serialized;
     }
 
-    public static parse(serialized: string): Address {
+    public static parse(serialized: string): Address | undefined {
         if (serialized.endsWith(Server.User)) {
             let id = parseInt(serialized.substring(0, serialized.length - Server.User.length))
             return new UserAddress(id)
         } else if (serialized.endsWith(Server.Group)) {
             let id = parseInt(serialized.substring(0, serialized.length - Server.Group.length))
             return new GroupAddress(id)
-        } else {
-            throw Error(`Failed to parse address: ${serialized}`)
-        }
+        } else return
     }
 }
 

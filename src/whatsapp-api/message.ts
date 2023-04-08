@@ -19,11 +19,15 @@ export class MessageBase {
 
     public static parse(message: WAMessage): { message: MessageBase, type: string } | undefined {
         let chat = Address.parse(message.key?.remoteJid ?? "")
+        if (!chat) return
+
         let inGroup = !(chat instanceof UserAddress)
         let author
 
-        if (inGroup) author = Address.parse(message.key?.participant ?? "")
-        else author = chat
+        if (inGroup) {
+            author = Address.parse(message.key?.participant ?? "")
+            if (!author) return
+        } else author = chat
 
         let type = getContentType(message.message ?? undefined)
 
