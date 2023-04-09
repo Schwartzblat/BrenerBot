@@ -2,8 +2,9 @@
 // (C) Martin Alebachew, 2023
 // Based on https://github.com/adiwajshing/Baileys/blob/9c28dde04d5f9e797e5d31a48912f2044b2f07ac/src/Utils/use-multi-file-auth-state.ts
 
-import { mkdir, readFile, stat, unlink, writeFile } from 'fs/promises'
-import { join } from 'path'
+import { mkdir, readFile, stat, writeFile } from "fs/promises"
+import { unlinkSync } from "fs"
+import { join } from "path"
 import { proto, initAuthCreds, BufferJSON, AuthenticationCreds, AuthenticationState, SignalDataTypeMap } from "@adiwajshing/baileys"
 import { Client } from "../mongodb-api/client"
 
@@ -35,13 +36,11 @@ export const multiStorageAuthState = async(folder: string, client: Client): Prom
 
     const removeData = async (file: string) => {
         const flatFilename = fixFileName(file)!
-        client.remove(flatFilename)
+        await client.remove(flatFilename)
 
         try {
-            unlink(join(folder, flatFilename))
-        } catch{
-
-        }
+            unlinkSync(join(folder, flatFilename))
+        } catch { }
     }
 
     const folderInfo = await stat(folder).catch(() => { })
