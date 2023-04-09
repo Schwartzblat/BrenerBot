@@ -4,18 +4,31 @@ An easy to use WhatsApp utility bot, written in TypeScript.
 Designed mainly for group chats!
 
 > **Warning**
-> BrenerBot relies on WhatsApp-Web.js to connect to the WhatsApp API. The connection _should_ be stable and not trigger any bans. However, WhatsApp hates fun, so consider it as a possibility, don't do anything stupid and pay attention to the API limits.
+> BrenerBot relies on Baileys to connect to the WhatsApp API. The connection _should_ be
+> stable and not trigger any bans. However, WhatsApp hates fun, so consider it as a possibility,
+> don't do anything stupid and pay attention to the API limits.
 
-## Features
+## Functionality
 
-| Feature                     | Availability |
-| :-------------------------- | :----------- |
-| Create stickers from text   | 🚧           |
-| Create stickers from images | ✅           |
-| Create stickers from videos | ✅           |
-| Create stickers from GIFs   | ✅           |
-| View source code            | ✅           |
-| View all commands           | 🚧           |
+### Commands
+
+| Command                                               | Description                 | Availability |
+| :---------------------------------------------------- | :-------------------------- | :----------- |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from text   | ✅           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from images | ❌           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from videos | ❌           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from GIFs   | ❌           |
+| [admin/shutdown.ts](src/commands/admin/shutdown.ts)   | Remote termination by owner | ✅           |
+| [other/code.ts](src/commands/other/code.ts)           | View source code            | ✅           |
+| [other/help.ts](src/commands/other/help.ts)           | View all commands           | 🚧           |
+
+### Features
+
+| Feature              | Branch            | Availability |
+| :------------------- | :---------------- | :----------- |
+| Advanced logging     | feature/logging   | 🚧           |
+| Heroku compatibility | feature/heroku    | 🚧           |
+| WebSocket connection | feature/websocket | 🚧           |
 
 ## Getting started
 
@@ -27,9 +40,9 @@ _config.json_
 
 ```json
 {
-    "botPrefix": "!",
-    "countryCode": "US",
-    "phoneNumber": "2133734253"
+  "botPrefix": "!",
+  "countryCode": "US",
+  "phoneNumber": "2133734253"
 }
 ```
 
@@ -81,28 +94,32 @@ conforming with the command structure, as specified in 'src/commands/commands.ts
 A command file should look like this:
 
 ```typescript
-import { Command, GroupChatPermissions, PrivateChatPermissions } from "../commands"
-import { Client, Message } from 'whatsapp-web.js'
+import {
+  Command,
+  GroupChatPermissions,
+  PrivateChatPermissions,
+} from "../commands";
+import { Client, Message } from "whatsapp-web.js";
 
 let command: Command = {
-    permissions: {
-        groupChat: GroupChatPermissions.Everyone,
-        privateChat: PrivateChatPermissions.Owner
-    },
+  permissions: {
+    groupChat: GroupChatPermissions.Everyone,
+    privateChat: PrivateChatPermissions.Owner,
+  },
 
-    nativeText: {
-        name: "ping",
-        description: "pongs!",
-        category: "misc"
-    },
+  nativeText: {
+    name: "ping",
+    description: "pongs!",
+    category: "misc",
+  },
 
-    async execute(client: Client, msg: Message, args: string[]) {
-        if (args.length) return
-        await msg.reply("pong! 🏓")
-    }
-}
+  async execute(client: Client, msg: Message, args: string[]) {
+    if (args.length) return;
+    await msg.reply("pong! 🏓");
+  },
+};
 
-module.exports = command
+module.exports = command;
 ```
 
 Share your commands with us :)
