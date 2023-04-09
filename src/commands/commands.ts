@@ -1,8 +1,8 @@
 // commands.ts
 // (C) Martin Alebachew, 2023
 
-import { WhatsAppConnection } from "../whatsapp-api/client"
-import { MessageBase } from "../whatsapp-api/message"
+import { WhatsAppConnection } from '../whatsapp-api/client';
+import { MessageBase } from '../whatsapp-api/message';
 
 export enum GroupChatPermissions {
     Nobody, Owner, Admin, Everyone
