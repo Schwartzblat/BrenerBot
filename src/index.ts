@@ -23,7 +23,7 @@ if (existsSync(join(__dirname,"../config.json"))) {
 
 const BOT_PREFIX = config?.botPrefix || process.env.BOT_PREFIX  // Prefix for all bot commands
 let phoneNumber = parsePhoneNumber(config?.phoneNumber || process.env.PHONE_NUMBER, config?.countryCode || process.env.COUNTRY_CODE)
-const OWNER_ADDRESS = new UserAddress(parseInt(phoneNumber.countryCallingCode + phoneNumber.nationalNumber))  // Bot owner's address
+const OWNER_ADDRESS = new UserAddress(phoneNumber.countryCallingCode + phoneNumber.nationalNumber)  // Bot owner's address
 
 
 // Phase 0: Dispatch HTTP listener
