@@ -9,6 +9,7 @@ Designed mainly for group chats!
 > don't do anything stupid and pay attention to the API limits.
 
 ## Functionality
+### Commands
 
 | Command                                               | Description                 | Availability |
 | :---------------------------------------------------- | :-------------------------- | :----------- |
@@ -22,11 +23,12 @@ Designed mainly for group chats!
 
 ### Features
 
-| Feature              | Branch          | Availability |
-| :------------------- | :-------------- | :----------- |
-| Advanced logging     | feature/logging | 🚧           |
-| Heroku compatibility | feature/heroku  | 🚧           |
-| WebSocket connection |                 | ❌           |
+| Feature              | Branch            | Availability |
+| :------------------- | :---------------- | :----------- |
+| Advanced logging     | feature/logging   | 🚧           |
+| Heroku compatibility | feature/heroku    | 🚧           |
+| WebSocket connection | feature/websocket | 🚧           |
+
 
 ## Getting started
 
