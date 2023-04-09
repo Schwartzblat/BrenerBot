@@ -4,8 +4,8 @@
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "../commands"
 import { WhatsAppConnection } from "../../whatsapp-api/client"
 import { MessageBase } from "../../whatsapp-api/message"
-import { CanvasRenderingContext2D, createCanvas, registerFont } from 'canvas';
-const sharp = require("sharp")
+import { CanvasRenderingContext2D, createCanvas, registerFont } from "canvas";
+import { Sticker, createSticker, StickerTypes } from "wa-sticker-formatter"
 
 const STICKER_NAME = "BrenerBot"
 const STICKER_AUTHOR = "@martinalebachew on GitHub"
@@ -17,15 +17,6 @@ const STICKER_BG_COLORS = ['#63AF6F', '#6398AF', '#8463AF', '#AF6395', '#ADAF63'
 
 const TESTING_FONT_SIZE = 20
 const LINE_HEIGHT_MULTIPLIER = 0.92
-
-const STICKER_METADATA = JSON.stringify(
-    {
-        "sticker-pack-id": "martinalebachew/BrenerBot",
-        "sticker-pack-name": STICKER_NAME,
-        "sticker-pack-publisher": STICKER_AUTHOR,
-        "emojis": [""]
-    }
-)
 
 class Line {
     content: string
@@ -124,11 +115,15 @@ async function textToImageBuffer(text: string) {
     }
 
     const pngBuffer = canvas.toBuffer("image/png")
-    const sharpInstance = sharp(pngBuffer)
-    sharpInstance.webp({ metadata: STICKER_METADATA })
+    const sticker = new Sticker(pngBuffer, {
+        id: "martinalebachew/BrenerBot",
+        pack: STICKER_NAME,
+        author: STICKER_AUTHOR,
+        categories: []  // Sticker emojis
+    })
 
-    // Return WebP buffer with sticker properties
-    return await sharpInstance.toBuffer()
+    // Return WebP buffer with sticker metadata
+    return await sticker.toBuffer()
 }
 
 let command: Command = {
