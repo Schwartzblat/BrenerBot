@@ -13,10 +13,16 @@ import { GroupParticipant } from "@adiwajshing/baileys";
 
 
 // Phase 0: Load configuration file
-const config  = require("../config.json")
-const BOT_PREFIX = config.botPrefix  // Prefix for all bot commands
+let filesystem = require("fs")
+let config
 
-let phoneNumber = parsePhoneNumber(config.phoneNumber, config.countryCode)
+if (filesystem.existsSync("../config.json")) {
+    log("Loading configuration from config.json...")
+    config  = require("../config.json")
+} else log("Loading configuration from environment variables...")
+
+const BOT_PREFIX = config?.botPrefix || process.env.BOT_PREFIX  // Prefix for all bot commands
+let phoneNumber = parsePhoneNumber(config?.phoneNumber || process.env.PHONE_NUMBER, config?.countryCode || process.env.COUNTRY_CODE)
 const OWNER_ADDRESS = new UserAddress(parseInt(phoneNumber.countryCallingCode + phoneNumber.nationalNumber))  // Bot owner's address
 
 
