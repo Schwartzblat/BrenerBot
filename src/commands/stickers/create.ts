@@ -76,6 +76,7 @@ function splitLinesIntoSquare(text: string, ctx: CanvasRenderingContext2D) {
 async function textToImageBuffer(text: string) {
     text = text.replace(/\n+/g, ' ');  // Strip line breaks
     text = text.trim();  // Trim whitespaces
+    text = text.replace(/ {2,}/g, " ");  // Replace multiple spaces with one space
 
     // Set up font and canvas
     registerFont('fonts/Assistant/Bold.ttf', { family: 'StickerFont' });
