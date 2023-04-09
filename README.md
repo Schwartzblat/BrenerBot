@@ -14,10 +14,10 @@ Designed mainly for group chats!
 
 | Command                                               | Description                 | Availability |
 | :---------------------------------------------------- | :-------------------------- | :----------- |
-| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from text   | 🚧           |
-| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from images | ✅           |
-| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from videos | ✅           |
-| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from GIFs   | ✅           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from text   | ✅           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from images | ❌           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from videos | ❌           |
+| [stickers/create.ts](src/commands/stickers/create.ts) | Create stickers from GIFs   | ❌           |
 | [admin/shutdown.ts](src/commands/admin/shutdown.ts)   | Remote termination by owner | ✅           |
 | [other/code.ts](src/commands/other/code.ts)           | View source code            | ✅           |
 | [other/help.ts](src/commands/other/help.ts)           | View all commands           | 🚧           |
