@@ -11,14 +11,14 @@ export class Address {
     private _server: Server
     public serialized: string
 
-    constructor(id: number, server: Server) {
-        this._id = id.toString()
+    constructor(id: string, server: Server) {
+        this._id = id
         this._server = server
         this.serialized = this._serialize()
     }
 
-    public set id (id: number) {
-        this._id = id.toString()
+    public set id (id: string) {
+        this._id = id
         this.serialized = this._serialize()
     }
 
@@ -41,23 +41,23 @@ export class Address {
 
     public static parse(serialized: string): Address | undefined {
         if (serialized.endsWith(Server.User)) {
-            let id = parseInt(serialized.substring(0, serialized.length - Server.User.length))
+            let id = serialized.substring(0, serialized.length - Server.User.length)
             return new UserAddress(id)
         } else if (serialized.endsWith(Server.Group)) {
-            let id = parseInt(serialized.substring(0, serialized.length - Server.Group.length))
+            let id = serialized.substring(0, serialized.length - Server.Group.length)
             return new GroupAddress(id)
         } else return
     }
 }
 
 export class UserAddress extends Address {
-    constructor(userId: number) {
+    constructor(userId: string) {
         super(userId, Server.User);
     }
 }
 
 export class GroupAddress extends Address {
-    constructor(groupId: number) {
+    constructor(groupId: string) {
         super(groupId, Server.Group);
     }
 }
