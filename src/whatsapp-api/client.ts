@@ -1,7 +1,8 @@
 // client.ts
 // (C) Martin Alebachew, 2023
 
-import makeWASocket, {WAMessage, MessageUpsertType, ConnectionState } from "@adiwajshing/baileys"
+import makeWASocket, { WAMessage, MessageUpsertType, ConnectionState, DisconnectReason } from "@adiwajshing/baileys"
+import { Boom } from '@hapi/boom'
 import { WAConnectionState } from "@adiwajshing/baileys/lib/Types/State";
 import { GroupAddress, UserAddress } from "./address"
 import { MessageBase, TextMessage } from "./message"
@@ -13,8 +14,13 @@ export class WhatsAppConnection {
     private _conn: any
 
     async authenticate(client: Client) {
-        const { state, saveCreds } = await multiStorageAuthState(".wweb_auth", client)
         await client.downloadAll(".wweb_auth")
+        await this.authenticateImpl(client)
+    }
+
+    async authenticateImpl(client: Client) {
+
+        const { state, saveCreds } = await multiStorageAuthState(".wweb_auth", client)
 
         this._conn = makeWASocket({
             auth: state,
@@ -24,19 +30,22 @@ export class WhatsAppConnection {
 
         this._conn.ev.on("creds.update", saveCreds)
 
-        this._conn.ev.on('connection.update', ({ connection, lastDisconnect }: { connection: WAConnectionState, lastDisconnect: ConnectionState["lastDisconnect"] }) => {
+        this._conn.ev.on("connection.update", ({ connection, lastDisconnect }: { connection: WAConnectionState, lastDisconnect: ConnectionState["lastDisconnect"] }) => {
             switch (connection) {
-                case 'close':
-                    console.log('🔴 Connection failed: ', lastDisconnect?.error)
-                    break;
+                case "close":
+                    console.log("🔴 Connection failed:", lastDisconnect?.error ?? "Unknown error")
+                const loggedOut = (lastDisconnect?.error as Boom)?.output?.statusCode === DisconnectReason.loggedOut
+                    console.log(loggedOut ? "Not attempting to reconnect." : "Attempting to reconnect...")
+                    if (!loggedOut) this.authenticateImpl(client)
+                    break
 
-                case 'connecting':
+                case "connecting":
                     console.log('🟡 Connecting...')
-                    break;
+                    break
 
-                case 'open':
+                case "open":
                     console.log('🟢 Connected!')
-                    break;
+                    break
             }
         })
     }

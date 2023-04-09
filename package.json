@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@adiwajshing/baileys": "^5.0.0",
+    "@hapi/boom": "^10.0.1",
     "canvas": "^2.11.2",
     "libphonenumber-js": "^1.10.26",
     "mongodb": "^5.2.0",
