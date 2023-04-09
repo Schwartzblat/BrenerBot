@@ -22,12 +22,11 @@ Designed mainly for group chats!
 
 ### Features
 
-| Feature                     | Branch          | Availability |
-| :-------------------------- | :-------------- | :----------- |
-| Advanced logging            | feature/logging | 🚧           |
-| Heroku compatibility        | feature/heroku  | 🚧           |
-| WebSocket connection        |                 | ❌           |
-
+| Feature              | Branch          | Availability |
+| :------------------- | :-------------- | :----------- |
+| Advanced logging     | feature/logging | 🚧           |
+| Heroku compatibility | feature/heroku  | 🚧           |
+| WebSocket connection |                 | ❌           |
 
 ## Getting started
 
@@ -39,9 +38,9 @@ _config.json_
 
 ```json
 {
-    "botPrefix": "!",
-    "countryCode": "US",
-    "phoneNumber": "2133734253"
+  "botPrefix": "!",
+  "countryCode": "US",
+  "phoneNumber": "2133734253"
 }
 ```
 
@@ -98,28 +97,32 @@ conforming with the command structure, as specified in 'src/commands/commands.ts
 A command file should look like this:
 
 ```typescript
-import { Command, GroupChatPermissions, PrivateChatPermissions } from "../commands"
-import { Client, Message } from 'whatsapp-web.js'
+import {
+  Command,
+  GroupChatPermissions,
+  PrivateChatPermissions,
+} from "../commands";
+import { Client, Message } from "whatsapp-web.js";
 
 let command: Command = {
-    permissions: {
-        groupChat: GroupChatPermissions.Everyone,
-        privateChat: PrivateChatPermissions.Owner
-    },
+  permissions: {
+    groupChat: GroupChatPermissions.Everyone,
+    privateChat: PrivateChatPermissions.Owner,
+  },
 
-    nativeText: {
-        name: "ping",
-        description: "pongs!",
-        category: "misc"
-    },
+  nativeText: {
+    name: "ping",
+    description: "pongs!",
+    category: "misc",
+  },
 
-    async execute(client: Client, msg: Message, args: string[]) {
-        if (args.length) return
-        await msg.reply("pong! 🏓")
-    }
-}
+  async execute(client: Client, msg: Message, args: string[]) {
+    if (args.length) return;
+    await msg.reply("pong! 🏓");
+  },
+};
 
-module.exports = command
+module.exports = command;
 ```
 
 Share your commands with us :)
