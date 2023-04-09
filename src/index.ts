@@ -10,13 +10,12 @@ import { MessageBase, TextMessage } from "./whatsapp-api/message"
 import { UserAddress} from "./whatsapp-api/address";
 import { parsePhoneNumber } from "libphonenumber-js"
 import { GroupParticipant } from "@adiwajshing/baileys";
-
+import { Client } from "./mongodb-api/client";
+import { existsSync, readdirSync, statSync } from "fs"
 
 // Phase 0: Load configuration file
-let filesystem = require("fs")
-let config
-
-if (filesystem.existsSync("../config.json")) {
+export let config: any
+if (existsSync(join(__dirname,"../config.json"))) {
     log("Loading configuration from config.json...")
     config  = require("../config.json")
 } else log("Loading configuration from environment variables...")
@@ -33,12 +32,11 @@ log("Loading command files...")
 export let commandsDict: { [key: string]: Command } = { }
 export let commandsByCategories: { [key: string]: Command[] } = { }
 ;(function scanForCommandFiles(fullDir: string) {
-    let filesystem = require("fs")
-    filesystem.readdirSync(fullDir).forEach((filename: string) => {
+    readdirSync(fullDir).forEach((filename: string) => {
         // For every file and directory under the commands directory:
         if (!filename.endsWith("commands.js") && !filename.endsWith("categories.js")) {  // Both files are NOT commands
             let file = fullDir + '/' + filename  // Get full path
-            if (filesystem.statSync(file).isDirectory())
+            if (statSync(file).isDirectory())
                 scanForCommandFiles(file)
                 // TODO: limit to one level only
             else {
@@ -55,11 +53,16 @@ export let commandsByCategories: { [key: string]: Command[] } = { }
         }
     });
 })(join(__dirname, "commands"))  // Project's sub-directory for command files
-log("Loaded command.")
+log("Loaded commands.")
 
 // Phase 2: Connect to WhatsApp
+const username = config?.mongoDB?.username || process.env.MONGODB_USERNAME
+const password = config?.mongoDB?.password || process.env.MONGODB_PASSWORD
+const endpoint = config?.mongoDB?.endpoint || process.env.MONGODB_ENDPOINT
+
+const mongodb = new Client(username, password, endpoint)
 const whatsapp = new WhatsAppConnection()
-whatsapp.authenticate().then(() => { whatsapp.setCallback(messageCallback) })
+whatsapp.authenticate(mongodb).then(() => { whatsapp.setCallback(messageCallback) })
 
 async function messageCallback(message: TextMessage, type: string ) {
     /* Pre-processing: This function is called only on messages

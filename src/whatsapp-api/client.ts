@@ -1,16 +1,21 @@
 // client.ts
 // (C) Martin Alebachew, 2023
 
-import makeWASocket, { WAMessage, MessageUpsertType, useMultiFileAuthState } from "@adiwajshing/baileys"
+import makeWASocket, {WAMessage, MessageUpsertType, ConnectionState } from "@adiwajshing/baileys"
+import { WAConnectionState } from "@adiwajshing/baileys/lib/Types/State";
 import { GroupAddress, UserAddress } from "./address"
 import { MessageBase, TextMessage } from "./message"
+import { Client } from "../mongodb-api/client"
+import { multiStorageAuthState } from "./multi-storage-auth-state"
 let pino = require("pino")
 
 export class WhatsAppConnection {
     private _conn: any
 
-    async authenticate() {
-        const { state, saveCreds } = await useMultiFileAuthState(".wweb_auth")
+    async authenticate(client: Client) {
+        const { state, saveCreds } = await multiStorageAuthState(".wweb_auth", client)
+        await client.downloadAll(".wweb_auth")
+
         this._conn = makeWASocket({
             auth: state,
             printQRInTerminal: true,
@@ -18,6 +23,22 @@ export class WhatsAppConnection {
         })
 
         this._conn.ev.on("creds.update", saveCreds)
+
+        this._conn.ev.on('connection.update', ({ connection, lastDisconnect }: { connection: WAConnectionState, lastDisconnect: ConnectionState["lastDisconnect"] }) => {
+            switch (connection) {
+                case 'close':
+                    console.log('🔴 Connection failed: ', lastDisconnect?.error)
+                    break;
+
+                case 'connecting':
+                    console.log('🟡 Connecting...')
+                    break;
+
+                case 'open':
+                    console.log('🟢 Connected!')
+                    break;
+            }
+        })
     }
 
     async setCallback(messageCallback: (message: TextMessage, type: string) => Promise<void>) {

@@ -1,5 +1,10 @@
 {
     "botPrefix": "!",
     "countryCode": "US",
-    "phoneNumber": "2133734253"
+    "phoneNumber": "2133734253",
+    "mongoDB": {
+        "username": "heroku",
+        "password": "password1",
+        "endpoint": "bot-data-cluster.49nJ3We.mongodb.net"
+    }
 }
