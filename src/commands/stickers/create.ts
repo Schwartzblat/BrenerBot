@@ -2,8 +2,10 @@
 // (C) Martin Alebachew, 2023
 
 import { Command, GroupChatPermissions, PrivateChatPermissions } from "../commands"
-import { Client, Message, MessageMedia, MessageTypes } from 'whatsapp-web.js'
-import { CanvasRenderingContext2D, createCanvas, registerFont } from 'canvas';
+import { WhatsAppConnection } from "../../whatsapp-api/client"
+import { MessageBase } from "../../whatsapp-api/message"
+import { CanvasRenderingContext2D, createCanvas, registerFont } from "canvas";
+import { Sticker, createSticker, StickerTypes } from "wa-sticker-formatter"
 
 const STICKER_NAME = "BrenerBot"
 const STICKER_AUTHOR = "@martinalebachew on GitHub"
@@ -11,7 +13,6 @@ const STICKER_AUTHOR = "@martinalebachew on GitHub"
 const IMAGE_SIZE_PX = 800
 const IMAGE_PADDING_PX = 160
 
-const IMAGE_MIME_TYPE = "image/png"
 const STICKER_BG_COLORS = ['#63AF6F', '#6398AF', '#8463AF', '#AF6395', '#ADAF63']
 
 const TESTING_FONT_SIZE = 20
@@ -72,7 +73,7 @@ function splitLinesIntoSquare(text: string, ctx: CanvasRenderingContext2D) {
     // Note: longestLine, squareWidth, squareHeight, squareDiff, squarePrevDiff are now OUTDATED
 }
 
-function textToImageBase64(text: string) {
+async function textToImageBuffer(text: string) {
     text = text.replace(/\n+/g, " ")  // Strip line breaks
 
     // Set up font and canvas
@@ -113,12 +114,20 @@ function textToImageBase64(text: string) {
         ctx.fillText(lines[i].content, x, y + i * (fontSize * LINE_HEIGHT_MULTIPLIER))
     }
 
-    // Return base64 image
-    return canvas.toBuffer(IMAGE_MIME_TYPE).toString("base64")
+    const pngBuffer = canvas.toBuffer("image/png")
+    const sticker = new Sticker(pngBuffer, {
+        id: "martinalebachew/BrenerBot",
+        pack: STICKER_NAME,
+        author: STICKER_AUTHOR,
+        categories: []  // Sticker emojis
+    })
+
+    // Return WebP buffer with sticker metadata
+    return await sticker.toBuffer()
 }
 
 let command: Command = {
-    requestTypes: [MessageTypes.IMAGE, MessageTypes.VIDEO, MessageTypes.TEXT],
+    requestTypes: ["conversation"],
     permissions: {
         groupChat: GroupChatPermissions.Everyone,
         privateChat: PrivateChatPermissions.Everyone
@@ -129,16 +138,15 @@ let command: Command = {
         description: ""
     },
 
-    async execute(client: Client, msg: Message, args: string[]) {
-        let media: MessageMedia
+    async execute(whatsapp: WhatsAppConnection, message: MessageBase, type: string, args: string[]) {
+        // if (args.length && type == MessageTypes.TEXT) {
+        //     media = new MessageMedia(IMAGE_MIME_TYPE, textToImageBase64(args.join(" ")))
+        // } else if (!args.length && (message.type == MessageTypes.IMAGE || message.type == MessageTypes.VIDEO)) {
+        //     media = await message.downloadMedia()
+        // } else return
 
-        if (args.length && msg.type == MessageTypes.TEXT) {
-            media = new MessageMedia(IMAGE_MIME_TYPE, textToImageBase64(args.join(" ")))
-        } else if (!args.length && (msg.type == MessageTypes.IMAGE || msg.type == MessageTypes.VIDEO)) {
-            media = await msg.downloadMedia()
-        } else return
-
-        await msg.reply(media, undefined, { sendMediaAsSticker: true, stickerName: STICKER_NAME, stickerAuthor: STICKER_AUTHOR })
+        await whatsapp.stickerReply(message, await textToImageBuffer(args.join(" ")))
+        // TODO: change name and author
     }
 }
 

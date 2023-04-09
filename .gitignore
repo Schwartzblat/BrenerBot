@@ -8,7 +8,7 @@ config.json
 .DS_Store
 
 # WhatsApp auth files
-.wwebjs_auth
+.wweb_auth
 
 # JetBrains IDEs
 .idea
