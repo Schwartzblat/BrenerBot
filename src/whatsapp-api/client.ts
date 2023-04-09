@@ -19,7 +19,6 @@ export class WhatsAppConnection {
     }
 
     async authenticateImpl(client: Client) {
-
         const { state, saveCreds } = await multiStorageAuthState(".wweb_auth", client)
 
         this._conn = makeWASocket({

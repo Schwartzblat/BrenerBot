@@ -4,7 +4,6 @@
 import { MongoClient, Db, Collection } from "mongodb"
 import { rmSync, writeFileSync, mkdirSync } from "fs"
 import { join } from "path"
-import { stringifier } from "../whatsapp-api/multi-storage-auth-state"
 
 const DATABASE = "api-auth"
 const COLLECTION = "whatsapp"
@@ -51,6 +50,7 @@ export class Client {
     }
 
     public async downloadAll(folder: string) {
+        console.log("\nDownloading authentication files...")
         rmSync(folder, { recursive: true, force: true })
         mkdirSync(folder)
         const documents = await this.collection.find({ })
@@ -58,8 +58,10 @@ export class Client {
             const filename = document.filename
             delete document.filename
 
-            const deadBuffer = stringifier(document.data)
-            writeFileSync(join(folder, filename), deadBuffer)
+            writeFileSync(join(folder, filename), document.data)
+            console.log("* Downloaded: ", filename)
         })
+
+        console.log("Successfully downloaded authentication files.\n")
     }
 }
