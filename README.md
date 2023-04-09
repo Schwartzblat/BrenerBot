@@ -80,7 +80,7 @@ npm run build
 #### Start: Run BrenerBot from compiled build
 
 ```
-npm run run
+npm start
 ```
 
 And that's it!
@@ -128,8 +128,6 @@ Share your commands with us :)
 Add the following buildpacks in your app:
 - https://github.com/heroku/heroku-buildpack-nodejs
 - https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
-- https://github.com/jontewks/puppeteer-heroku-buildpack
-- https://github.com/heroku/heroku-buildpack-google-chrome
 
 To run BrenerBot on Heroku, follow the next steps:
 1. Download BrenerBot onto your local machine.
