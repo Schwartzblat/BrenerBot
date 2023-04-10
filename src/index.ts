@@ -44,7 +44,7 @@ function scanForCommandFiles(fullDir: string) {
         // For every file and directory under the commands directory:
         if (filename.endsWith('commands.js') || filename.endsWith('categories.js')) {
             return;
-        }// Both files are NOT commands
+        } // Both files are NOT commands
         const file = fullDir + '/' + filename;  // Get full path
         if (statSync(file).isDirectory())
             scanForCommandFiles(file);
